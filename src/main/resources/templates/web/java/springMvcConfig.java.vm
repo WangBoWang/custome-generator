@@ -1,0 +1,106 @@
+package ${cfg.package}.${package.ModuleName};
+
+import com.segi.uhomecp.authc.AuthcIceClientService;
+import com.segi.uhomecp.authc.AuthcUserClientService;
+import com.segi.uhomecp.sso.client.annotation.AdminUserMethodArgumentResolver;
+import com.segi.uhomecp.sso.client.annotation.HeaderMethodArgumentResolver;
+import com.segi.uhomecp.sso.client.annotation.UserMethodArgumentResolver;
+import com.segi.uhomecp.sso.client.filter.AuthRequestHeaderFilter;
+import com.segi.uhomecp.sso.client.filter.AuthRequstChainFilter;
+import com.segi.uhomecp.utils.UhomePropUtils;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import java.util.List;
+
+/**
+ * <p>
+ * spring mvc配置
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Configuration
+public class WebMvcConfig extends WebMvcConfigurerAdapter {
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        super.addArgumentResolvers(argumentResolvers);
+        argumentResolvers.add(new AdminUserMethodArgumentResolver());
+        argumentResolvers.add(new HeaderMethodArgumentResolver());
+        argumentResolvers.add(new UserMethodArgumentResolver());
+    }
+
+    @Bean
+    public AuthcIceClientService authcIceClientService(){
+        return new AuthcIceClientService();
+    }
+
+    @Bean
+    public AuthcUserClientService authcUserClientService(){
+        return new AuthcUserClientService();
+    }
+
+    /**
+     * 配置过滤器 -- CharacterEncodingFilter
+     * @return
+     */
+    @Bean
+    @Order(Integer.MIN_VALUE + 1)
+    public FilterRegistrationBean characterFilterRegistration() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(new CharacterEncodingFilter());
+        registration.addUrlPatterns("/*");
+        registration.addInitParameter("encoding", "UTF-8");
+        registration.addInitParameter("forceEncoding", "true");
+        registration.setName("encodingFilter");
+        return registration;
+    }
+
+    /**
+     * 配置过滤器 -- AuthRequestHeaderFilter
+     * @return
+     */
+    @Bean
+    @Order(Integer.MIN_VALUE + 2)
+    public FilterRegistrationBean authRequestHeaderFilterRegistration() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(new AuthRequestHeaderFilter());
+        registration.addUrlPatterns("/*");
+        registration.setName("authRequestHeaderFilter");
+        return registration;
+    }
+
+    /**
+     * 配置过滤器 -- AuthRequestHeaderFilter
+     * @return
+     */
+    @Bean
+    @Order(Integer.MIN_VALUE + 3)
+    public FilterRegistrationBean authRequstChainFilterRegistration() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(new AuthRequstChainFilter());
+        registration.addUrlPatterns("/*");
+        registration.addInitParameter("excludeFilters", UhomePropUtils.getProperty("auth.request.exclude.filters","/v1/no/auth,/v1/no,/appSurvey/getSurveryPreview"));
+        registration.addInitParameter("incluleFilters", UhomePropUtils.getProperty("auth.request.inclule.filters",""));
+        registration.setName("authRequstChainFilter");
+        return registration;
+    }
+
+//    @Bean
+//    public RestTemplate restTemplate() {
+//        RestTemplate restTemplate = new RestTemplate();
+//        return restTemplate;
+//    }
+//
+//    @Bean
+//    public RedisUtil redisUtil(){
+//        return new RedisUtil();
+//    }
+}

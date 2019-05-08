@@ -1,0 +1,33 @@
+package ${package.Mapper};
+
+import ${package.Entity}.${entity};
+import ${cfg.package}.${package.ModuleName}.dto.request.${entity}PageRequest;
+
+import java.util.List;
+
+/**
+ * <p>
+ * $!{table.comment} Mapper 接口
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+public interface ${table.mapperName} {
+
+    int insert(${entity} record);
+
+    int insertSelective(${entity} record);
+
+    ${entity} selectByPrimaryKey(long id);
+
+    int updateByPrimaryKey(${entity} record);
+
+    int updateByPrimaryKeySelective(${entity} record);
+
+    int deleteByPrimaryKey(long id);
+
+    List<${entity}> page(${entity}PageRequest request);
+
+    int count(${entity}PageRequest request);
+}

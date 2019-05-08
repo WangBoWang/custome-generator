@@ -1,0 +1,99 @@
+package ${package.ServiceImpl};
+
+import com.segi.uhomecp.sequence.SequenceRpcClient;
+import ${cfg.package}.${package.ModuleName}.constants.SeqConstant;
+import ${cfg.package}.${package.ModuleName}.dto.request.${entity}Request;
+import ${cfg.package}.${package.ModuleName}.dto.request.${entity}PageRequest;
+import ${package.Entity}.${entity};
+import ${cfg.package}.${package.ModuleName}.exceptions.ServiceException;
+import ${package.Mapper}.${entity}Mapper;
+import ${package.Service}.${entity}Service;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import tddl.sequences.SequenceException;
+import org.springframework.cglib.beans.BeanCopier;
+
+import java.util.List;
+
+/**
+ * <p>
+ * $!{table.comment}相关接口实现
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Slf4j
+@Service
+public class ${entity}ServiceImpl implements ${entity}Service {
+
+    private ${entity}Mapper ${table.entityPath}Mapper;
+    
+    public ${entity}ServiceImpl(${entity}Mapper ${table.entityPath}Mapper) {
+        this.${table.entityPath}Mapper = ${table.entityPath}Mapper;
+    }
+
+    public int add(${entity}Request request) throws ServiceException, SequenceException {
+        log.info("$!{table.comment}新增请求参数: {}" , request);
+        if (null == request){
+            return 0;
+        }
+
+        ${entity} ${table.entityPath} = new ${entity}();
+        BeanCopier copier = BeanCopier.create(request.getClass(), ${table.entityPath}.getClass(), false);
+        copier.copy(request, ${table.entityPath}, null);
+//        Long id = SequenceRpcClient.getCurrentSequenceValue(SeqConstant.${table.name}_seq);
+//        request.setId(id);
+        int count = ${table.entityPath}Mapper.insertSelective(${table.entityPath});
+        log.info("$!{table.comment}新增返回数据: {}" , count);
+        return count;
+    }
+
+    public ${entity} query(long id) throws Exception {
+        log.info("$!{table.comment}单个查询请求参数: {}" , id);
+        if (id <= 0){
+            return null;
+        }
+
+        ${entity} ${table.entityPath} = ${table.entityPath}Mapper.selectByPrimaryKey(id);
+        log.info("$!{table.comment}单个查询返回数据: {}" , ${table.entityPath});
+        return ${table.entityPath};
+    }
+
+    public int update(${entity}Request request) throws Exception {
+        log.info("$!{table.comment}修改请求参数: {}" , request);
+        if (null == request){
+            return 0;
+        }
+
+        ${entity} ${table.entityPath} = new ${entity}();
+        BeanCopier copier = BeanCopier.create(request.getClass(), ${table.entityPath}.getClass(), false);
+        copier.copy(request, ${table.entityPath}, null);
+        int count = ${table.entityPath}Mapper.updateByPrimaryKeySelective(${table.entityPath});
+        log.info("$!{table.comment}修改返回数据: {}" , count);
+        return count;
+    }
+
+    public int delete(long id) throws Exception {
+        log.info("$!{table.comment}删除请求参数: {}" , id);
+        if (id <= 0){
+            return 0;
+        }
+
+        int count = ${table.entityPath}Mapper.deleteByPrimaryKey(id);
+        log.info("$!{table.comment}删除返回数据: {}" , count);
+        return count;
+    }
+
+    public List<${entity}> page(${entity}PageRequest request) throws Exception {
+        log.info("$!{table.comment}列表分页查询请求参数: {}" , request);
+        request.setStartRow((request.getPageNo() - 1) * request.getPageLength());//设置起始行数
+        List<${entity}> ${table.entityPath}List = ${table.entityPath}Mapper.page(request);
+        log.info("$!{table.comment}列表分页查询返回数据 size is: {}" , ${table.entityPath}List.size());
+        return ${table.entityPath}List;
+    }
+
+    public int count(${entity}PageRequest request) throws Exception {
+        return ${table.entityPath}Mapper.count(request);
+    }
+}

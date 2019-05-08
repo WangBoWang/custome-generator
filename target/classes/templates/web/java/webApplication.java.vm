@@ -1,0 +1,34 @@
+package ${cfg.package}.${package.ModuleName};
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.ImportResource;
+
+/**
+ * <p>
+ * 程序入口
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@SpringBootApplication(exclude={DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class})
+@ImportResource(locations = {"classpath:spring/applicationContext-web.xml"})
+@ServletComponentScan
+public class WebApplication extends SpringBootServletInitializer {
+
+    public static void main(String[] args) {
+        System.setProperty("server.context.code", "${cfg.webProjectName}");
+        SpringApplication.run(WebApplication.class, args);
+    }
+
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        System.setProperty("server.context.code", "${cfg.webProjectName}");
+        return builder.sources(WebApplication.class);
+    }
+}

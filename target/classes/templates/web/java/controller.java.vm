@@ -1,0 +1,185 @@
+package ${package.Controller};
+
+import com.github.miemiedev.mybatis.paginator.domain.Paginator;
+import com.segi.uhomecp.core.utils.ValidatorUtils;
+import ${cfg.package}.service.dto.request.${entity}PageRequest;
+import ${cfg.package}.service.dto.request.${entity}Request;
+import ${cfg.package}.service.entity.${entity};
+import ${cfg.package}.service.service.${entity}Service;
+import com.segi.uhomecp.sso.auth.vo.User;
+import com.segi.uhomecp.sso.client.annotation.AdminUserParam;
+import com.segi.uhomecp.sso.utils.StringUtils;
+import com.segi.uhomecp.web.rest.RestResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Validator;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ * <p>
+ * $!{table.comment}控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@RestController
+@Slf4j
+@RequestMapping("/${table.entityPath}")
+public class ${entity}Controller {
+
+    private final Validator validator;
+    private ${entity}Service ${table.entityPath}Service;
+
+    public ${entity}Controller(Validator validator, ${entity}Service ${table.entityPath}Service) {
+        this.validator = validator;
+        this.${table.entityPath}Service = ${table.entityPath}Service;
+    }
+
+    /**
+     * $!{table.comment}新增
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public RestResponse add(@AdminUserParam User user, @RequestBody ${entity}Request request) {
+        log.info("【$!{table.comment}新增】请求参数: {}", request);
+        String validator = ValidatorUtils.validator(this.validator, request);
+        if (StringUtils.isNotEmpty(validator)) {
+            return RestResponse.RestResponseBuilder.createFailBuilder(validator).buidler();
+        }
+
+        if (null == user || null == user.getUserId()) {
+            return RestResponse.RestResponseBuilder.createFailBuilder("用户未登录").buidler();
+        }
+
+        int count = 0;
+        try {
+            count = ${table.entityPath}Service.add(request);
+        } catch (Exception e) {
+            log.error("【$!{table.comment}新增】异常: {}", e);
+        }
+        if (count <= 0) {
+            return RestResponse.RestResponseBuilder.createFailBuilder("失败").buidler();
+        }
+
+        return RestResponse.RestResponseBuilder.createSuccessBuilder("成功").buidler();
+    }
+
+    /**
+     * $!{table.comment}列表分页查询
+     *
+     * @return
+     */
+    @RequestMapping(value = "/page", method = RequestMethod.POST)
+    public RestResponse page(@RequestBody ${entity}PageRequest request) {
+        log.info("【$!{table.comment}列表分页查询】请求参数: {}", request);
+        Paginator paginator;
+        List<${entity}> list = new ArrayList();
+        try {
+            list = ${table.entityPath}Service.page(request);
+            paginator = new Paginator(request.getPageNo(), request.getPageLength(), ${table.entityPath}Service.count(request));
+        } catch (Exception e) {
+            log.error("【$!{table.comment}分页查询】异常", e);
+            paginator = new Paginator(request.getPageNo(), request.getPageLength(), 0);
+        }
+        log.info("【$!{table.comment}列表分页查询】返回数据 size is: {}", list.size());
+        Map<String, Object> map = new ConcurrentHashMap<String, Object>();
+        map.put("paginator", paginator);
+        map.put("resultList", list);
+        return RestResponse.RestResponseBuilder.createSuccessBuilder().setResult(map).buidler();
+    }
+
+    /**
+     * $!{table.comment}单个查询
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/query", method = RequestMethod.GET)
+    public RestResponse query(@RequestParam Long id) {
+        log.info("【$!{table.comment}单个查询】请求参数: {}", id);
+        if (id == null || id <= 0) {
+            return RestResponse.RestResponseBuilder.createFailBuilder("ID不能为空").buidler();
+        }
+
+        ${entity} model = null;
+        try {
+            model = ${table.entityPath}Service.query(id);
+        } catch (Exception e) {
+            log.error("【$!{table.comment}单个查询】异常: {}", e);
+        }
+        log.info("【$!{table.comment}单个查询】返回数据: {}", model);
+        if (model == null) {
+            return RestResponse.RestResponseBuilder.createFailBuilder("查询失败").buidler();
+        }
+
+        return RestResponse.RestResponseBuilder.createSuccessBuilder("查询成功").setResult(model).buidler();
+    }
+
+    /**
+     * $!{table.comment}修改
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public RestResponse update(@AdminUserParam User user, @RequestBody ${entity}Request request) {
+        log.info("【$!{table.comment}修改】请求参数: {}", request);
+        String validator = ValidatorUtils.validator(this.validator, request);
+        if (StringUtils.isNotEmpty(validator)) {
+            return RestResponse.RestResponseBuilder.createFailBuilder(validator).buidler();
+        }
+
+//        if (null == request.getId() || request.getId() <= 0) {
+//            return RestResponse.RestResponseBuilder.createFailBuilder("ID不能为空").buidler();
+//        }
+
+        if (null == user || null == user.getUserId()) {
+            return RestResponse.RestResponseBuilder.createFailBuilder("用户未登录").buidler();
+        }
+
+        int count = 0;
+        try {
+            count = ${table.entityPath}Service.update(request);
+        } catch (Exception e) {
+            log.error("【$!{table.comment}修改】异常: {}", e);
+        }
+        if (count <= 0) {
+            return RestResponse.RestResponseBuilder.createFailBuilder("失败").buidler();
+        }
+
+        return RestResponse.RestResponseBuilder.createSuccessBuilder("成功").buidler();
+    }
+
+    /**
+     * $!{table.comment}删除
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/delete", method = RequestMethod.GET)
+    public RestResponse delete(@RequestParam Long id) {
+        log.info("【$!{table.comment}删除】请求参数: {}", id);
+        if (null == id || id == 0) {
+            return RestResponse.RestResponseBuilder.createFailBuilder("ID不能为空").buidler();
+        }
+
+        int count = 0;
+        try {
+            count = ${table.entityPath}Service.delete(id);
+        } catch (Exception e) {
+            log.error("【$!{table.comment}删除】异常: {}", e);
+        }
+        if (count <= 0) {
+            return RestResponse.RestResponseBuilder.createFailBuilder("失败").buidler();
+        }
+
+        return RestResponse.RestResponseBuilder.createSuccessBuilder("成功").buidler();
+    }
+}

@@ -1,0 +1,22 @@
+package ${cfg.package}.${package.ModuleName}.constants;
+
+/**
+ * <p>
+ * 序列常量类
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+public class SeqConstant {
+
+#foreach($table in ${cfg.tableList})
+#if("$!table.comment" != "")
+    /**
+     * ${table.name} ${table.comment}
+     */
+#end
+    public final static String ${table.name}_seq = "${table.name}_seq";
+
+#end
+}

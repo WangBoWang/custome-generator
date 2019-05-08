@@ -1,0 +1,11 @@
+server:
+  context-path: "/generator"
+  port: 8080
+
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+
+application.message: Hello Liang

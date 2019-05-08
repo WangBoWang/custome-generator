@@ -1,0 +1,19 @@
+package ${cfg.package}.${package.ModuleName}.dto.request;
+
+import lombok.Data;
+
+/**
+ * <p>
+ * $!{table.comment}列表分页查询请求参数
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Data
+public class ${entity}PageRequest implements java.io.Serializable {
+    public static final long serialVersionUID = 607227874L;
+    private Integer pageNo = 1;//当前页码,默认为1
+    private Integer pageLength = 20;//每页记录数，默认20
+    private Integer startRow;
+}
