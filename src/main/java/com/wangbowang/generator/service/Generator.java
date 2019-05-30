@@ -8,9 +8,9 @@ import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.DbType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
-import com.baomidou.mybatisplus.toolkit.StringUtils;
 import com.wangbowang.generator.config.ProjectTemplateConfig;
 import com.wangbowang.generator.dto.request.GeneratorRequest;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -62,9 +62,13 @@ public class Generator {
         //生成modules
         generatorModules(request,dataSourceConfig,strategyConfig,globalConfig,packageConfig,injectionConfig,projectTemplateConfig);
         //生成web项目代码
-        generatorWebProject(request,dataSourceConfig,strategyConfig,globalConfig,packageConfig,injectionConfig,projectTemplateConfig);
+        if(StringUtils.isNotEmpty(request.getWebProjectName())){
+            generatorWebProject(request,dataSourceConfig,strategyConfig,globalConfig,packageConfig,injectionConfig,projectTemplateConfig);
+        }
         //生成service代码
-        generatorServiceProject(request,dataSourceConfig,strategyConfig,globalConfig,packageConfig,injectionConfig,projectTemplateConfig);
+        if(StringUtils.isNotEmpty(request.getServiceProjectName())){
+            generatorServiceProject(request,dataSourceConfig,strategyConfig,globalConfig,packageConfig,injectionConfig,projectTemplateConfig);
+        }
     }
 
     /**
