@@ -21,9 +21,9 @@ public class ProjectTemplateConfig extends TemplateConfig {
     public final static String service_impl = "/templates/service/java/serviceImpl.java.vm";
     public final static String service_exception = "/templates/service/java/serviceException.java.vm";
     public final static String page_request = "/templates/service/java/pageRequest.java.vm";
-    public final static String service_pom = "/templates/service/service.pom.vm";
     public final static String request = "/templates/service/java/request.java.vm";
     public final static String response = "/templates/service/java/response.java.vm";
+    public final static String service_pom = "/templates/service/service.pom.vm";
 
     /**
      * web项目模板
@@ -38,4 +38,6 @@ public class ProjectTemplateConfig extends TemplateConfig {
     public final static String web_pom = "/templates/web/web.pom.vm";
 
     public final static String modules_pom = "/templates/modules.pom.vm";
+
+
 }

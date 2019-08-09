@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 代码生成逻辑
+ * 多模块代码生成逻辑
  * @author wangb
  * @create 2019/5/8
  * @since 1.0.0
@@ -42,6 +42,16 @@ public class Generator {
         }
         return generator;
     }
+
+    /**
+     * 生成多模块代码
+     */
+    public void multiModuleGeneratorProject(GeneratorRequest request){
+
+    }
+
+
+
     /**
      * 代码生成服务实现入口
      */
@@ -60,7 +70,9 @@ public class Generator {
         ProjectTemplateConfig projectTemplateConfig = buildTemplateConfig();
 
         //生成modules
-        generatorModules(request,dataSourceConfig,strategyConfig,globalConfig,packageConfig,injectionConfig,projectTemplateConfig);
+        if(StringUtils.isNotEmpty(request.getModules())){
+            generatorModules(request,dataSourceConfig,strategyConfig,globalConfig,packageConfig,injectionConfig,projectTemplateConfig);
+        }
         //生成web项目代码
         if(StringUtils.isNotEmpty(request.getWebProjectName())){
             generatorWebProject(request,dataSourceConfig,strategyConfig,globalConfig,packageConfig,injectionConfig,projectTemplateConfig);
@@ -110,8 +122,8 @@ public class Generator {
         projectDir.append("\\");
         projectDir.append(request.getWebProjectName());
         globalConfig.setOutputDir(projectDir.toString());
-
-        packageConfig.setModuleName("web"); //自定义配置
+        //自定义配置
+        packageConfig.setModuleName("web");
 
         //自定义文件输出
         List<FileOutConfig> fileOutConfigList = new ArrayList<FileOutConfig>();
@@ -159,7 +171,9 @@ public class Generator {
         StringBuilder projectDir = new StringBuilder();
         projectDir.append(request.getOutputDir());
         projectDir.append("\\");
-        projectDir.append(request.getModules());
+        if(StringUtils.isNotEmpty(request.getModules())){
+            projectDir.append(request.getModules());
+        }
         projectDir.append("\\");
         projectDir.append(request.getServiceProjectName());
         globalConfig.setOutputDir(projectDir.toString());
@@ -278,7 +292,8 @@ public class Generator {
 //                .setDbColumnUnderline(true)
                 //从数据库表到文件的命名策略
                 .setNaming(NamingStrategy.underline_to_camel)
-                .setTablePrefix(strategyConfig.getTablePrefixes())// 此处可以修改为您的表前缀
+                // 此处可以修改为您的表前缀
+                .setTablePrefix(strategyConfig.getTablePrefixes())
                 //需要生成的的表名，多个表名传数组
                 .setInclude(strategyConfig.getTableNames());
     }
@@ -306,10 +321,12 @@ public class Generator {
                 map.put("outputDir", InjectionConfig.getOutputDir());
                 map.put("groupId", InjectionConfig.getPackageName());
                 map.put("modules", InjectionConfig.getModules());
-                map.put("package", InjectionConfig.getPackageName());//包路径
+                //包路径
+                map.put("package", InjectionConfig.getPackageName());
                 map.put("serviceProjectName", InjectionConfig.getServiceProjectName());
                 map.put("webProjectName", InjectionConfig.getWebProjectName());
-                map.put("tableList", this.getConfig().getTableInfoList());//表信息集合
+                //表信息集合
+                map.put("tableList", this.getConfig().getTableInfoList());
                 this.setMap(map);
             }
         };

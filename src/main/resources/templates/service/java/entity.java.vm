@@ -3,18 +3,20 @@ package ${package.Entity};
 import lombok.Data;
 
 import java.io.Serializable;
+
 #foreach($field in ${table.fields})
 #set($fieldType = ${field.type})
 #if($fieldType.contains("timestamp"))
+import java.sql.Timestamp;
+#end
+#if($fieldType.contains("date"))
 import java.util.Date;
-#break
 #end
+#if($fieldType.contains("datetime"))
+import java.sql.Timestamp;
 #end
-#foreach($field in ${table.fields})
-#set($fieldType = ${field.type})
 #if($fieldType.contains("decimal"))
 import java.math.BigDecimal;
-#break
 #end
 #end
 
