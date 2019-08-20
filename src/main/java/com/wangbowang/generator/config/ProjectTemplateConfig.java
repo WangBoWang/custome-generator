@@ -10,6 +10,22 @@ import com.baomidou.mybatisplus.generator.config.TemplateConfig;
  * @since 2018/4/27
  */
 public class ProjectTemplateConfig extends TemplateConfig {
+
+    /**
+     * provider项目模板
+     */
+    public final static String provider_controller = "/templates/provider/java/controller.java.vm";
+    public final static String provider_entity = "/templates/provider/java/entity.java.vm";
+    public final static String provider_mapper = "/templates/provider/java/mapper.java.vm";
+    public final static String provider_mapper_xml = "/templates/provider/resources/mapper.xml.vm";
+    public final static String provider_service = "/templates/provider/java/service.java.vm";
+    public final static String provider_service_impl = "/templates/provider/java/serviceImpl.java.vm";
+    public final static String provider_service_exception = "/templates/provider/java/serviceException.java.vm";
+    public final static String provider_page_request = "/templates/provider/java/pageRequest.java.vm";
+    public final static String provider_request = "/templates/provider/java/request.java.vm";
+    public final static String provider_response = "/templates/provider/java/response.java.vm";
+    public final static String provider_service_pom = "/templates/provider/service.pom.vm";
+
     /**
      * service项目模板
      */

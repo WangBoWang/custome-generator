@@ -1,0 +1,108 @@
+package ${package.Controller};
+
+
+import ${cfg.package}.dto.request.${entity}PageRequest;
+import ${cfg.package}.dto.request.${entity}Request;
+import ${cfg.package}.entity.${entity};
+import ${cfg.package}.service.${entity}Service;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Validator;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+
+/**
+ * <p>
+ * $!{table.comment}控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@RestController
+@Slf4j
+@RequestMapping("/${table.entityPath}")
+public class ${entity}Controller {
+
+    private final Validator validator;
+    private ${entity}Service ${table.entityPath}Service;
+
+    public ${entity}Controller(Validator validator, ${entity}Service ${table.entityPath}Service) {
+        this.validator = validator;
+        this.${table.entityPath}Service = ${table.entityPath}Service;
+    }
+
+    /**
+     * $!{table.comment}新增
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public int add(@RequestBody ${entity}Request request) {
+        log.info("【$!{table.comment}新增】请求参数: {}", request);
+        int count = 0;
+        try {
+            count = ${table.entityPath}Service.add(request);
+        } catch (Exception e) {
+            log.error("【$!{table.comment}新增】异常: {}", e);
+        }
+        return count;
+    }
+
+    /**
+     * $!{table.comment}列表分页查询
+     *
+     * @return
+     */
+    @RequestMapping(value = "/page", method = RequestMethod.POST)
+    public IPage page(@RequestBody ${entity}PageRequest request) {
+        log.info("【$!{table.comment}列表分页查询】请求参数: {}", request);
+        IPage<${entity}> pageResult = new IPage();
+        try {
+            pageResult = ${table.entityPath}Service.page(request);
+        } catch (Exception e) {
+            log.error("【$!{table.comment}分页查询】异常", e);
+        }
+        log.info("【$!{table.comment}列表分页查询】返回数据");
+        return pageResult;
+    }
+
+    /**
+     * $!{table.comment}单个查询
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/query", method = RequestMethod.GET)
+    public ${entity}  query(@RequestParam Long id) {
+        log.info("【$!{table.comment}单个查询】请求参数: {}", id);
+
+        ${entity} model = null;
+        try {
+            model = ${table.entityPath}Service.query(id);
+        } catch (Exception e) {
+            log.error("【$!{table.comment}单个查询】异常: {}", e);
+        }
+        log.info("【$!{table.comment}单个查询】返回数据: {}", model);
+        return model;
+    }
+
+    /**
+     * $!{table.comment}修改
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public int update(@RequestBody ${entity}Request request) {
+        log.info("【$!{table.comment}修改】请求参数: {}", request);
+        int count = 0;
+        try {
+            count = ${table.entityPath}Service.update(request);
+        } catch (Exception e) {
+            log.error("【$!{table.comment}修改】异常: {}", e);
+        }
+        return count;
+    }
+}

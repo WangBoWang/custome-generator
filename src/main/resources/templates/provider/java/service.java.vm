@@ -1,0 +1,55 @@
+package ${package.Service};
+
+import ${package.Entity}.${entity};
+import ${cfg.package}.exceptions.ServiceException;
+import ${cfg.package}.dto.request.${entity}Request;
+import ${cfg.package}.dto.request.${entity}PageRequest;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+
+/**
+ * <p>
+ * $!{table.comment}相关接口
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+public interface ${entity}Service {
+
+    /**
+     * $!{table.comment}新增
+     *
+     * @param request
+     * @return
+     * @throws ServiceException
+     */
+    int add(${entity}Request request);
+
+    /**
+     * $!{table.comment}单个查询
+     *
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    ${entity} query(long id);
+
+    /**
+     * $!{table.comment}修改
+     *
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    int update(${entity}Request request);
+
+    /**
+     * $!{table.comment}列表分页查询
+     *
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    IPage<${entity}> page(${entity}PageRequest request);
+
+}

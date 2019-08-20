@@ -6,13 +6,13 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * 代码生成请求参数
+ * 代码生成通用请求参数
  * @author wangb
- * @create 2019/5/8
+ * @create 2019/08/12
  * @since 1.0.0
  */
 @Data
-public class GeneratorRequest {
+public class GeneratorCommonRequest {
     /**
      * 数据库类型
      * mysql,oracle,等等
@@ -69,21 +69,6 @@ public class GeneratorRequest {
      */
     @NotBlank(message = "文件输出路径不能为空")
     private String outputDir;
-    /**
-     * 模块名称
-     */
-    @NotBlank(message = "模块名称不能为空")
-    private String modules;
-    /**
-     * service项目名称
-     */
-    @NotBlank(message = "service项目名称不能为空")
-    private String serviceProjectName;
-    /**
-     * web项目名称
-     */
-    @NotBlank(message = "web项目名称不能为空")
-    private String webProjectName;
     /**
      * 作者
      */

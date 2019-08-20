@@ -1,0 +1,66 @@
+#* 定义全局变量:主键数据库字段、对象字段、字段类型begin... *###
+#set($keyPropertyName=${field.propertyName})
+#set($keyFieldName=${field.name})
+#set($keyFieldJdbcType=${field.type})
+#foreach($field in ${table.fields})
+#if(${field.keyFlag})
+#set($keyPropertyName=${field.propertyName})
+#set($keyFieldName=${field.name})
+#set($fieldType = ${field.type})
+#if($fieldType.contains("char") || $fieldType.contains("text"))
+#set($keyFieldJdbcType = "VARCHAR")
+#elseif($fieldType.contains("bigint"))
+#set($keyFieldJdbcType = "BIGINT")
+#elseif($fieldType.contains("int"))
+#set($keyFieldJdbcType = "INTEGER")
+#elseif($fieldType.contains("double"))
+#set($keyFieldJdbcType = "DOUBLE")
+#elseif($fieldType.contains("timestamp"))
+#set($keyFieldJdbcType = "TIMESTAMP")
+#elseif($fieldType.contains("date"))
+#set($keyFieldJdbcType = "DATE")
+#end
+#end
+#end
+#* 定义全局变量:主键数据库字段、对象字段、字段类型end... *###
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${package.Mapper}.${entity}Mapper">
+    <resultMap id="BaseResultMap" type="${package.Entity}.${entity}">
+#foreach($field in ${table.fields})
+#* 处理字段jdbc类型 begin... *###
+#set($fieldType = ${field.type})
+#if($fieldType.contains("char") || $fieldType.contains("text"))
+#set($fieldJdbcType = "VARCHAR")
+#elseif($fieldType.contains("bigint"))
+#set($fieldJdbcType = "BIGINT")
+#elseif($fieldType.contains("int"))
+#set($fieldJdbcType = "INTEGER")
+#elseif($fieldType.contains("double"))
+#set($fieldJdbcType = "DOUBLE")
+#elseif($fieldType.contains("timestamp"))
+#set($fieldJdbcType = "TIMESTAMP")
+#elseif($fieldType.contains("date"))
+#set($fieldJdbcType = "DATE")
+#elseif($fieldType.contains("decimal"))
+#set($fieldJdbcType = "DECIMAL")
+#end
+#* 处理字段jdbc类型 ...end *###
+#if(${field.keyFlag})
+        <id column="${field.name}" jdbcType="${fieldJdbcType}" property="${field.propertyName}"/>
+#else
+        <result column="${field.name}" jdbcType="${fieldJdbcType}" property="${field.propertyName}"/>
+#end
+#end
+    </resultMap>
+    <sql id="Base_Column_List">
+#foreach($field in ${table.fields})
+#if($!{velocityCount}==1)
+        ${field.name}#else, ${field.name}##
+#end
+#end
+    </sql>
+
+
+
+</mapper>
