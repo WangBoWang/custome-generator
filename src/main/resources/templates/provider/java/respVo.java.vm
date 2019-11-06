@@ -1,0 +1,38 @@
+package ${cfg.package}.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
+/**
+ * <p>
+ * 接口调用返回对象
+ * </p>
+ * @author ${author}
+ * @since ${date}
+ * @version 1.0.0
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class RespVo<T> {
+
+    int code;
+    String msg;
+    T data;
+
+    public static <TYPE> RespVo<TYPE> success(TYPE data) {
+        return new RespVo<>(0, null, data);
+    }
+
+    public static RespVo success() {
+        return new RespVo<>(0, null, null);
+    }
+
+
+    public static RespVo<Void> error(int code, String msg) {
+        return new RespVo<>(code, msg, null);
+    }
+
+}

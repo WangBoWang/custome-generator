@@ -2,19 +2,13 @@ package com.wangbowang.generator.service;
 
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
-import com.baomidou.mybatisplus.generator.config.*;
-import com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert;
-import com.baomidou.mybatisplus.generator.config.po.TableInfo;
-import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
-import com.baomidou.mybatisplus.generator.config.rules.DbType;
-import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+import com.baomidou.mybatisplus.generator.config.FileOutConfig;
+import com.baomidou.mybatisplus.generator.config.GlobalConfig;
+import com.baomidou.mybatisplus.generator.config.PackageConfig;
 import com.wangbowang.generator.config.ProjectTemplateConfig;
 import com.wangbowang.generator.context.GeneratorConfigContext;
 import com.wangbowang.generator.dto.request.GeneratorMicroServiceRequest;
-import com.wangbowang.generator.dto.request.GeneratorMulitModuleRequest;
-import org.apache.commons.lang.StringUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -80,6 +74,9 @@ public class MicroServiceGenerator{
         GeneratorCommonService.addFileOutConfig(fileOutConfigList, ProjectTemplateConfig.provider_service_exception,
                 projectDir + "/src/main/java/" + packageConfig.getParent() + "/exceptions/",
                 "ServiceException.java");
+        GeneratorCommonService.addFileOutConfig(fileOutConfigList, ProjectTemplateConfig.provider_exception_constant,
+                projectDir + "/src/main/java/" + packageConfig.getParent() + "/constant/",
+                "ExceptionCodeConstant.java");
         GeneratorCommonService.addFileOutConfigWithTableInfo(fileOutConfigList, ProjectTemplateConfig.provider_mapper,
                 projectDir + "/src/main/java/" + packageConfig.getParent() + "/mapper/",
                 "Mapper.java");
@@ -101,6 +98,12 @@ public class MicroServiceGenerator{
         GeneratorCommonService.addFileOutConfigWithTableInfo(fileOutConfigList, ProjectTemplateConfig.provider_response,
                 projectDir + "/src/main/java/" + packageConfig.getParent() + "/dto/response/",
                 "Response.java");
+        GeneratorCommonService.addFileOutConfig(fileOutConfigList, ProjectTemplateConfig.provider_page_vo,
+                projectDir + "/src/main/java/" + packageConfig.getParent() + "/dto/",
+                "PageVo.java");
+        GeneratorCommonService.addFileOutConfig(fileOutConfigList, ProjectTemplateConfig.provider_resp_vo,
+                projectDir + "/src/main/java/" + packageConfig.getParent() + "/dto/",
+                "RespVo.java");
         InjectionConfig injectionConfig = configContext.getInjectionConfig();
         injectionConfig.setFileOutConfigList(fileOutConfigList);
 

@@ -6,11 +6,13 @@ import java.io.Serializable;
 
 #foreach($field in ${table.fields})
 #set($fieldType = ${field.type})
+#set($imports = {})
 #if($fieldType.contains("timestamp"))
 import java.sql.Timestamp;
 #end
-#if($fieldType.contains("date"))
+#if($fieldType.contains("date") && !$imports.contains("date"))
 import java.util.Date;
+$imports.add("date")
 #end
 #if($fieldType.contains("datetime"))
 import java.sql.Timestamp;

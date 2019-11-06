@@ -1,23 +1,26 @@
 package ${cfg.package}.exceptions;
 
+import ${cfg.package}.dto.RespVo;
+/**
+ * <p>
+ *  异常定义类
+ * </p>
+ * @author ${author}
+ * @since ${date}
+ * @version 1.0.0
+ */
 public class ServiceException extends Exception {
 
-    private static final long serialVersionUID = 1L;
+    private Integer code;
+    private String msg;
 
-    public ServiceException() {
-        super();
+    public ServiceException(Integer code, String msg) {
+        this.code = code;
+        this.msg = msg;
     }
 
-    public ServiceException(String msg) {
-        super(msg);
-    }
-
-    public ServiceException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public ServiceException(Throwable cause) {
-        super(cause);
+    public RespVo<Void> toRespVo() {
+        return RespVo.error(this.code, this.msg);
     }
 
 }

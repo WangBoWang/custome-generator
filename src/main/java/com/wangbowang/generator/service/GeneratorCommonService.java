@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.generator.config.rules.DbType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.wangbowang.generator.config.ProjectTemplateConfig;
 import com.wangbowang.generator.dto.request.GeneratorCommonRequest;
-import com.wangbowang.generator.dto.request.GeneratorMulitModuleRequest;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.File;

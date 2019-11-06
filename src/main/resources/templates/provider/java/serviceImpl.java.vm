@@ -1,86 +1,107 @@
 package ${package.ServiceImpl};
 
-
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.stereotype.Service;
 import ${cfg.package}.dto.request.${entity}Request;
 import ${cfg.package}.dto.request.${entity}PageRequest;
 import ${package.Entity}.${entity};
 import ${package.Mapper}.${entity}Mapper;
 import ${package.Service}.${entity}Service;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.cglib.beans.BeanCopier;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import ${cfg.package}.constant.ExceptionCodeConstant;
+import ${cfg.package}.exceptions.ServiceException;
 
 
 /**
  * <p>
  * $!{table.comment}相关接口实现
  * </p>
- *
  * @author ${author}
  * @since ${date}
+ * @version 1.0.0
  */
 @Slf4j
 @Service
 public class ${entity}ServiceImpl extends ServiceImpl<${entity}Mapper, ${entity}> implements ${entity}Service {
 
-    private ${entity}Mapper ${table.entityPath}Mapper;
-
-    public ${entity}ServiceImpl(${entity}Mapper ${table.entityPath}Mapper) {
-        this.${table.entityPath}Mapper = ${table.entityPath}Mapper;
-    }
-
     @Override
-    public int add(${entity}Request request){
+    public Long add(${entity}Request request) throws ServiceException{
         log.info("$!{table.comment}新增请求参数: {}" , request);
         if (null == request){
-            return 0;
+            log.info("$!{table.comment}新增失败" , "入参不合法");
+            throw new ServiceException(ExceptionCodeConstant.INVALID_PARAM,"入参不合法");
         }
-
         ${entity} ${table.entityPath} = new ${entity}();
+        Long id = IdWorker.getId();
         BeanCopier copier = BeanCopier.create(request.getClass(), ${table.entityPath}.getClass(), false);
         copier.copy(request, ${table.entityPath}, null);
-        int count = ${table.entityPath}Mapper.insert(${table.entityPath});
-        log.info("$!{table.comment}新增返回数据: {}" , count);
-        return count;
+        int count = baseMapper.insert(${table.entityPath});
+        boolean result = (count!=0);
+        if(!result){
+            log.info("$!{table.comment}新增失败" , "数据保存失败");
+            this new ServiceException(ExceptionCodeConstant.BUSINESS_ERR,"数据保存失败")
+        }
+        log.info("$!{table.comment}新增成功");
+        return id;
     }
 
     @Override
-    public ${entity} query(long id){
+    public ${entity} query(Long id) throws ServiceException{
         log.info("$!{table.comment}单个查询请求参数: {}" , id);
-        if (id <= 0){
-            return null;
+        if (null==id || id <= 0){
+            log.info("$!{table.comment}单个查询失败: {}" , "入参不合法");
+            throw new ServiceException(ExceptionCodeConstant.INVALID_PARAM,"入参不合法");
         }
-        ${entity} ${table.entityPath} = ${table.entityPath}Mapper.selectById(id);
+        ${entity} ${table.entityPath} = baseMapper.selectById(id);
         log.info("$!{table.comment}单个查询返回数据: {}" , ${table.entityPath});
         return ${table.entityPath};
     }
 
     @Override
-    public int update(${entity}Request request) throws Exception {
+    public boolean update(${entity}Request request) throws ServiceException {
         log.info("$!{table.comment}修改请求参数: {}" , request);
         if (null == request){
-            return 0;
+            log.info("$!{table.comment}修改失败: {}" , "入参不合法");
+            throw new ServiceException(ExceptionCodeConstant.INVALID_PARAM,"入参不合法");
         }
-
         ${entity} ${table.entityPath} = new ${entity}();
         BeanCopier copier = BeanCopier.create(request.getClass(), ${table.entityPath}.getClass(), false);
         copier.copy(request, ${table.entityPath}, null);
-        int count = ${table.entityPath}Mapper.updateById(${table.entityPath});
-        log.info("$!{table.comment}修改返回数据: {}" , count);
-        return count;
+        int count = baseMapper.updateById(${table.entityPath});
+        boolean result = (count!0);
+        log.info("$!{table.comment}修改结果: {}" , result);
+        return result;
     }
 
     @Override
-    public IPage<${entity}> page(${entity}PageRequest request) throws Exception {
+    public boolean deleteById(Long id) throws ServiceException{
+        log.info("$!{table.comment}单个删除请求参数: {}" , id);
+        if (null==id || id <= 0){
+            log.info("$!{table.comment}单个删除失败: {}" , "入参不合法");
+            throw new ServiceException(ExceptionCodeConstant.INVALID_PARAM,"入参不合法");
+        }
+        int count = baseMapper.deleteById(id);
+        boolean result = (count!=0);
+        log.info("$!{table.comment}单个删除结果: {}" , result);
+        return result;
+    }
+
+    @Override
+    public IPage<${entity}> page(${entity}PageRequest request) throws ServiceException {
         log.info("$!{table.comment}列表分页查询请求参数: {}" , request);
+        if (null == request){
+            log.info("$!{table.comment}列表分页查询失败: {}" , "入参不合法");
+            throw new ServiceException(ExceptionCodeConstant.INVALID_PARAM,"入参不合法");
+        }
         Page<${entity}> page = new Page<>(request.getPage(),request.getPageSize());
         page.setSearchCount(true);
         LambdaQueryWrapper<${entity}> lqw = new LambdaQueryWrapper();
-        IPage<${entity}> pageResult = ${table.entityPath}Mapper.selectPage(page,lqw);
+        IPage<${entity}> pageResult = baseMapper.selectPage(page,lqw);
         log.info("$!{table.comment}列表分页查询完成");
         return pageResult;
     }

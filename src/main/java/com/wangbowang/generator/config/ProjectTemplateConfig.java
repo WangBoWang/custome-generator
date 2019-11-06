@@ -21,9 +21,12 @@ public class ProjectTemplateConfig extends TemplateConfig {
     public final static String provider_service = "/templates/provider/java/service.java.vm";
     public final static String provider_service_impl = "/templates/provider/java/serviceImpl.java.vm";
     public final static String provider_service_exception = "/templates/provider/java/serviceException.java.vm";
+    public final static String provider_exception_constant = "/templates/provider/java/exceptionCodeConstant.java.vm";
     public final static String provider_page_request = "/templates/provider/java/pageRequest.java.vm";
     public final static String provider_request = "/templates/provider/java/request.java.vm";
     public final static String provider_response = "/templates/provider/java/response.java.vm";
+    public final static String provider_page_vo = "/templates/provider/java/pageVo.java.vm";
+    public final static String provider_resp_vo = "/templates/provider/java/respVo.java.vm";
     public final static String provider_service_pom = "/templates/provider/service.pom.vm";
 
     /**
