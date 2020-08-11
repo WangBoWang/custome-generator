@@ -78,21 +78,21 @@ public class GeneratorTest {
         GeneratorMicroServiceRequest generatorRequest = new GeneratorMicroServiceRequest();
         //配置数据源
         generatorRequest.setDbType(DbType.MYSQL.getValue()); //数据库类型
-        generatorRequest.setDbHost("localhost"); //数据库host
+        generatorRequest.setDbHost("rm-wz9e39c807z0hz6viuo.mysql.rds.aliyuncs.com"); //数据库host
         generatorRequest.setDbPort(3306); //数据库port，不填默认3306
-        generatorRequest.setDbUserName("root"); //用户名
-        generatorRequest.setDbPassword("wangbowang"); //密码
-        generatorRequest.setDbScheme("beerich_order_local"); //数据库实列
-        generatorRequest.setAuthor("wbw");
+        generatorRequest.setDbUserName("beerich_dev"); //用户名
+        generatorRequest.setDbPassword("m2iEFYl#6IH"); //密码
+        generatorRequest.setDbScheme("beerich_product_dev"); //数据库实列
+        generatorRequest.setAuthor("wangb");
         //配置策略
-//        generatorRequest.setTableName("user_compose_info,zb_loan_order,zb_loan_scheme,yj_user_service_evaluation");// 表名，多个逗号分隔
+        generatorRequest.setTableName("planning_report_product_config");// 表名，多个逗号分隔
 //        generatorRequest.setTablePrefix("vip_");// 表前缀，多个逗号分隔
         //配置项目结构和输出路径
 //        generatorRequest.setOutputDir("E:\\workSpace\\beerich-integration");// 文件输出路径
-        generatorRequest.setTableName("sign_sync_temp,earnest_money_sync_temp,remnant_payment_sync_temp");// 表名，多个逗号分隔
+//        generatorRequest.setTableName("holiday_config");// 表名，多个逗号分隔
         generatorRequest.setOutputDir("E:\\generator\\");// 文件输出路径
-        generatorRequest.setPackageName("com.beerich.integeration.data.sync");// 自定义包路径
-        generatorRequest.setProjectName("data-sync-service");// service项目名称
+        generatorRequest.setPackageName("com.beerich.integration.product");// 自定义包路径
+        generatorRequest.setProjectName("product-service");// service项目名称
         generatorRequest.setServiceType(ServiceTypeConstant.PROVIDER);
         //生成项目
         MicroServiceGenerator.getInstance().generatorProject(generatorRequest);
